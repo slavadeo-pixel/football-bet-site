@@ -3,8 +3,8 @@ from fastapi.responses import HTMLResponse
 from datetime import datetime
 import pytz
 
-from app.models import match_probabilities, outcome_probabilities, value_bet
 from app.utils import load_matches
+from app.models import match_probabilities, outcome_probabilities, value_bet
 
 app = FastAPI()
 
@@ -34,7 +34,10 @@ def matches():
 
             date = date.astimezone(MOSCOW)
 
-        except:
+        except Exception as e:
+
+            print("DATE ERROR:", e)
+
             continue
 
         home_xg = row["HomeGoalsAvg"]
@@ -65,7 +68,5 @@ def matches():
             "away_value": away_value
 
         })
-
-    results.sort(key=lambda x: max(x["home_value"], x["draw_value"], x["away_value"]), reverse=True)
 
     return results
