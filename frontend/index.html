@@ -16,7 +16,7 @@ th, td { border: 1px solid black; padding: 5px; text-align: center; }
 <table>
 <thead>
 <tr>
-<th>League</th><th>Home</th><th>Away</th>
+<th>League</th><th>Home</th><th>Away</th><th>Date/Time</th>
 <th>Home Value</th><th>Draw Value</th><th>Away Value</th>
 <th>Recommendations</th>
 </tr>
@@ -36,6 +36,7 @@ fetch("/matches")
 <td>${m.league}</td>
 <td>${m.home_team}</td>
 <td>${m.away_team}</td>
+<td>${m.date}</td>
 <td class="${hClass}">${m.value.home}%</td>
 <td class="${dClass}">${m.value.draw}%</td>
 <td class="${aClass}">${m.value.away}%</td>
