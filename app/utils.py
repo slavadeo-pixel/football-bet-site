@@ -1,17 +1,14 @@
 import requests
 
-API_KEY = "fa1b293b0c6ba1fa11843b282642600c"
+API_KEY = "530a55cc2ed9c60ee0458dd6e8f77cd4"
+
+url = "https://v3.football.api-sports.io/fixtures?next=50"
 
 headers = {
     "x-apisports-key": API_KEY
 }
 
-BASE_URL = "https://v3.football.api-sports.io"
-
-
 def load_matches():
-
-    url = f"{BASE_URL}/fixtures?next=100"
 
     response = requests.get(url, headers=headers)
 
@@ -25,37 +22,20 @@ def load_matches():
         print("API ERROR:", data)
         return []
 
-    for match in data["response"]:
+    for m in data["response"]:
 
-        try:
+        matches.append({
+            "League": m["league"]["name"],
+            "HomeTeam": m["teams"]["home"]["name"],
+            "AwayTeam": m["teams"]["away"]["name"],
+            "Date": m["fixture"]["date"],
+            "HomeGoalsAvg": 1.5,
+            "AwayGoalsAvg": 1.2,
+            "HomeOdds": 2.0,
+            "DrawOdds": 3.2,
+            "AwayOdds": 3.0
+        })
 
-            league = match["league"]["name"]
-
-            home = match["teams"]["home"]["name"]
-            away = match["teams"]["away"]["name"]
-
-            date = match["fixture"]["date"]
-
-            matches.append({
-
-                "League": league,
-                "HomeTeam": home,
-                "AwayTeam": away,
-                "Date": date,
-
-                "HomeGoalsAvg": 1.5,
-                "AwayGoalsAvg": 1.3,
-
-                "HomeOdds": 2.0,
-                "DrawOdds": 3.2,
-                "AwayOdds": 3.0
-
-            })
-
-        except Exception as e:
-
-            print("MATCH PARSE ERROR:", e)
-
-    print("MATCHES LOADED:", len(matches))
+    print("MATCHES:", len(matches))
 
     return matches
