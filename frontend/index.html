@@ -1,49 +1,111 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
+
 <meta charset="UTF-8">
-<title>Football Betting Dashboard</title>
+
+<title>Football Value Bets</title>
+
 <style>
-table { border-collapse: collapse; width: 100%; }
-th, td { border: 1px solid black; padding: 5px; text-align: center; }
-.green { background-color: #8BC34A; }
-.yellow { background-color: #FFEB3B; }
-.red { background-color: #F44336; }
+
+table{
+border-collapse: collapse;
+width:100%;
+}
+
+th,td{
+border:1px solid black;
+padding:6px;
+text-align:center;
+}
+
+.green{
+background:#8BC34A;
+}
+
+.yellow{
+background:#FFEB3B;
+}
+
+.red{
+background:#F44336;
+}
+
 </style>
+
 </head>
+
 <body>
-<h1>Football Betting Dashboard</h1>
+
+<h1>Football Value Bets (14 дней вперед)</h1>
+
 <table>
+
 <thead>
+
 <tr>
-<th>League</th><th>Home</th><th>Away</th><th>Date/Time</th>
-<th>Home Value</th><th>Draw Value</th><th>Away Value</th>
-<th>Recommendations</th>
+
+<th>Лига</th>
+<th>Дата (Москва)</th>
+<th>Хозяева</th>
+<th>Гости</th>
+
+<th>Home Value</th>
+<th>Draw Value</th>
+<th>Away Value</th>
+
+<th>Рекомендация</th>
+
 </tr>
+
 </thead>
-<tbody id="table-body"></tbody>
+
+<tbody id="table"></tbody>
+
 </table>
 
 <script>
+
 fetch("/matches")
-.then(res => res.json())
-.then(data => {
-    const tbody = document.getElementById("table-body");
-    data.forEach(m => {
-        const row = document.createElement("tr");
-        const hClass = m.highlight.home, dClass = m.highlight.draw, aClass = m.highlight.away;
-        row.innerHTML = `
+
+.then(r=>r.json())
+
+.then(data=>{
+
+const table=document.getElementById("table")
+
+data.forEach(m=>{
+
+const row=document.createElement("tr")
+
+row.innerHTML=`
+
 <td>${m.league}</td>
-<td>${m.home_team}</td>
-<td>${m.away_team}</td>
+
 <td>${m.date}</td>
-<td class="${hClass}">${m.value.home}%</td>
-<td class="${dClass}">${m.value.draw}%</td>
-<td class="${aClass}">${m.value.away}%</td>
-<td>${m.recommendations.join(", ")}</td>`;
-        tbody.appendChild(row);
-    });
-});
+
+<td>${m.home_team}</td>
+
+<td>${m.away_team}</td>
+
+<td class="${m.highlight.home}">${m.value.home}%</td>
+
+<td class="${m.highlight.draw}">${m.value.draw}%</td>
+
+<td class="${m.highlight.away}">${m.value.away}%</td>
+
+<td>${m.recommendations.join(", ")}</td>
+
+`
+
+table.appendChild(row)
+
+})
+
+})
+
 </script>
+
 </body>
+
 </html>
