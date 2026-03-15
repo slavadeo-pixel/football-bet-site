@@ -1,34 +1,37 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
 
 <meta charset="UTF-8">
 
-<title>Football Value Bets</title>
+<title>Value Bets Scanner</title>
 
 <style>
 
 table{
-border-collapse: collapse;
+
 width:100%;
+
+border-collapse:collapse;
+
 }
 
-th,td{
+td,th{
+
 border:1px solid black;
+
 padding:6px;
+
 text-align:center;
+
 }
 
 .green{
-background:#8BC34A;
-}
 
-.yellow{
-background:#FFEB3B;
-}
+background:#7CFC00;
 
-.red{
-background:#F44336;
 }
 
 </style>
@@ -37,7 +40,7 @@ background:#F44336;
 
 <body>
 
-<h1>Football Value Bets (14 дней вперед)</h1>
+<h1>Value Bet Scanner</h1>
 
 <table>
 
@@ -45,16 +48,14 @@ background:#F44336;
 
 <tr>
 
-<th>Лига</th>
-<th>Дата (Москва)</th>
-<th>Хозяева</th>
-<th>Гости</th>
+<th>League</th>
+<th>Date (Moscow)</th>
+<th>Home</th>
+<th>Away</th>
 
 <th>Home Value</th>
 <th>Draw Value</th>
 <th>Away Value</th>
-
-<th>Рекомендация</th>
 
 </tr>
 
@@ -76,7 +77,7 @@ const table=document.getElementById("table")
 
 data.forEach(m=>{
 
-const row=document.createElement("tr")
+let row=document.createElement("tr")
 
 row.innerHTML=`
 
@@ -84,17 +85,15 @@ row.innerHTML=`
 
 <td>${m.date}</td>
 
-<td>${m.home_team}</td>
+<td>${m.home}</td>
 
-<td>${m.away_team}</td>
+<td>${m.away}</td>
 
-<td class="${m.highlight.home}">${m.value.home}%</td>
+<td class="${m.home_value>5?'green':''}">${m.home_value}%</td>
 
-<td class="${m.highlight.draw}">${m.value.draw}%</td>
+<td class="${m.draw_value>5?'green':''}">${m.draw_value}%</td>
 
-<td class="${m.highlight.away}">${m.value.away}%</td>
-
-<td>${m.recommendations.join(", ")}</td>
+<td class="${m.away_value>5?'green':''}">${m.away_value}%</td>
 
 `
 
