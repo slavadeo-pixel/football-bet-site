@@ -13,13 +13,18 @@ headers = {
 def load_matches():
 
     today = datetime.utcnow().strftime("%Y-%m-%d")
+
     future = (datetime.utcnow() + timedelta(days=14)).strftime("%Y-%m-%d")
 
     url = f"{BASE_URL}/fixtures?from={today}&to={future}"
 
     response = requests.get(url, headers=headers)
 
+    print("API STATUS:", response.status_code)
+
     data = response.json()
+
+    print("API RESPONSE:", data)
 
     matches = []
 
@@ -36,21 +41,17 @@ def load_matches():
         date = match["fixture"]["date"]
 
         matches.append({
-
             "League": league,
             "HomeTeam": home,
             "AwayTeam": away,
             "Date": date,
-
-            # средние голы (пока фиксированные)
             "HomeGoalsAvg": 1.5,
             "AwayGoalsAvg": 1.3,
-
-            # пример коэффициентов
-            "HomeOdds": 2.1,
+            "HomeOdds": 2.0,
             "DrawOdds": 3.2,
-            "AwayOdds": 3.1
-
+            "AwayOdds": 3.0
         })
 
-    return matches 
+    print("MATCHES FOUND:", len(matches))
+
+    return matches
