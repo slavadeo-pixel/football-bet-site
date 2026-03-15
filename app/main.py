@@ -2,11 +2,15 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from app.models import match_probabilities, fair_odds, value_percentage
 from app.utils import load_matches, update_all_leagues
+from datetime import datetime, timedelta
+import pytz
 import os
 
 app = FastAPI(title="Football Betting Site")
 
 matches_df = load_matches()
+
+MOSCOW = pytz.timezone("Europe/Moscow")
 
 @app.get("/", response_class=HTMLResponse)
 def home():
@@ -17,7 +21,22 @@ def home():
 @app.get("/matches")
 def get_matches():
     results = []
+    now = datetime.now(MOSCOW)
+    two_weeks = now + timedelta(days=14)
+
     for _, row in matches_df.iterrows():
+        match_date_str = row.get("Date", "")
+        if not match_date_str:
+            continue
+        try:
+            match_date = datetime.strptime(match_date_str, "%d/%m/%Y")
+            match_date = MOSCOW.localize(match_date)
+        except:
+            continue
+
+        if not (now <= match_date <= two_weeks):
+            continue
+
         lambda_home = row.get('HomeGoalsAvg', 1.5)
         lambda_away = row.get('AwayGoalsAvg', 1.2)
         probs = match_probabilities(lambda_home, lambda_away)
@@ -42,6 +61,7 @@ def get_matches():
             "home_team": row.get('HomeTeam', 'Home'),
             "away_team": row.get('AwayTeam', 'Away'),
             "league": row.get('League', 'Unknown'),
+            "date": match_date.strftime("%d/%m/%Y %H:%M"),
             "fair_odds": {"home": fair_home, "draw": fair_draw, "away": fair_away},
             "value": {"home": value_home, "draw": value_draw, "away": value_away},
             "highlight": {
