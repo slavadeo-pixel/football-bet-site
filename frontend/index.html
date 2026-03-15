@@ -1,37 +1,27 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
 
 <meta charset="UTF-8">
 
-<title>Value Bets Scanner</title>
+<title>Football Value Bets</title>
 
 <style>
 
 table{
-
 width:100%;
-
 border-collapse:collapse;
-
 }
 
 td,th{
-
 border:1px solid black;
-
 padding:6px;
-
 text-align:center;
-
 }
 
 .green{
-
 background:#7CFC00;
-
 }
 
 </style>
@@ -40,7 +30,7 @@ background:#7CFC00;
 
 <body>
 
-<h1>Value Bet Scanner</h1>
+<h1>Football Value Bet Scanner</h1>
 
 <table>
 
@@ -49,7 +39,7 @@ background:#7CFC00;
 <tr>
 
 <th>League</th>
-<th>Date (Moscow)</th>
+<th>Date Moscow</th>
 <th>Home</th>
 <th>Away</th>
 
@@ -82,17 +72,12 @@ let row=document.createElement("tr")
 row.innerHTML=`
 
 <td>${m.league}</td>
-
 <td>${m.date}</td>
-
 <td>${m.home}</td>
-
 <td>${m.away}</td>
 
 <td class="${m.home_value>5?'green':''}">${m.home_value}%</td>
-
 <td class="${m.draw_value>5?'green':''}">${m.draw_value}%</td>
-
 <td class="${m.away_value>5?'green':''}">${m.away_value}%</td>
 
 `
