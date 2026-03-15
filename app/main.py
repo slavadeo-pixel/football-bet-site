@@ -1,19 +1,18 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from app.models import match_probabilities, fair_odds, value_percentage
 from app.utils import load_matches, update_all_leagues
+import os
 
-app = FastAPI(title="Football Betting API")
+app = FastAPI(title="Football Betting Site")
 
-# Загружаем данные
 matches_df = load_matches()
 
-@app.get("/update-data")
-def update_data():
-    """Обновление CSV и перезагрузка данных"""
-    update_all_leagues()
-    global matches_df
-    matches_df = load_matches()
-    return {"status": "Данные обновлены"}
+@app.get("/", response_class=HTMLResponse)
+def home():
+    html_file = os.path.join("frontend", "index.html")
+    with open(html_file, "r", encoding="utf-8") as f:
+        return f.read()
 
 @app.get("/matches")
 def get_matches():
@@ -31,14 +30,13 @@ def get_matches():
         value_draw = value_percentage(0.27, row.get('DrawOdds', 3.3))
         value_away = value_percentage(0.28, row.get('AwayOdds', 2.8))
 
-        # Рекомендации для профессионального беттера
         recommendations = []
         if value_home > 5 and fair_home > 2:
-            recommendations.append("Рассмотреть ставку на победу хозяев")
+            recommendations.append("Ставка на победу хозяев")
         if value_draw > 5 and fair_draw > 2.5:
-            recommendations.append("Рассмотреть ставку на ничью")
+            recommendations.append("Ставка на ничью")
         if value_away > 5 and fair_away > 2:
-            recommendations.append("Рассмотреть ставку на победу гостей")
+            recommendations.append("Ставка на победу гостей")
 
         results.append({
             "home_team": row.get('HomeTeam', 'Home'),
