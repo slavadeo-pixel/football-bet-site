@@ -1,6 +1,8 @@
 import math
 
+
 def poisson(k, lam):
+
     return (lam ** k * math.exp(-lam)) / math.factorial(k)
 
 
@@ -36,14 +38,6 @@ def outcome_probabilities(score_probs):
             away += p
 
     return home, draw, away
-
-
-def fair_odds(prob):
-
-    if prob == 0:
-        return 0
-
-    return round(1 / prob, 2)
 
 
 def value_bet(probability, odds):
