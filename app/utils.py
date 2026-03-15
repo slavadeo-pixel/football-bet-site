@@ -16,7 +16,7 @@ def load_matches():
 
     future = (datetime.utcnow() + timedelta(days=14)).strftime("%Y-%m-%d")
 
-    url = f"{BASE_URL}/fixtures?from={today}&to={future}"
+    url = f"{BASE_URL}/fixtures?next=100"
 
     response = requests.get(url, headers=headers)
 
