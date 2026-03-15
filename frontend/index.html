@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Football Betting Dashboard</title>
+<style>
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid black; padding: 5px; text-align: center; }
+.green { background-color: #8BC34A; }
+.yellow { background-color: #FFEB3B; }
+.red { background-color: #F44336; }
+</style>
+</head>
+<body>
+<h1>Football Betting Dashboard</h1>
+<table>
+<thead>
+<tr>
+<th>League</th><th>Home</th><th>Away</th>
+<th>Home Value</th><th>Draw Value</th><th>Away Value</th>
+<th>Recommendations</th>
+</tr>
+</thead>
+<tbody id="table-body"></tbody>
+</table>
+
+<script>
+fetch("/matches")
+.then(res => res.json())
+.then(data => {
+    const tbody = document.getElementById("table-body");
+    data.forEach(m => {
+        const row = document.createElement("tr");
+        const hClass = m.highlight.home, dClass = m.highlight.draw, aClass = m.highlight.away;
+        row.innerHTML = `
+<td>${m.league}</td>
+<td>${m.home_team}</td>
+<td>${m.away_team}</td>
+<td class="${hClass}">${m.value.home}%</td>
+<td class="${dClass}">${m.value.draw}%</td>
+<td class="${aClass}">${m.value.away}%</td>
+<td>${m.recommendations.join(", ")}</td>`;
+        tbody.appendChild(row);
+    });
+});
+</script>
+</body>
+</html>
